@@ -23,7 +23,7 @@ export class SimpleTable {
       $(`${this.tableSelector}`).hide();
       $(`${this.search_barSelector}`).hide();
 
-      this.importarCSSSeNecessario("js/SimpleTable/style/style.css");
+      this.importarCSSSeNecessario("./SimpleTable/style/style.css");
 
       this.importarBS();
 
@@ -231,15 +231,17 @@ export class SimpleTable {
             self.botoesPaginacao();
             resolve(response);
             $('.bp').prop('disabled', false);
-            // Swal.fire(
-            //   'Atenção!',
-            //   'Nenhum resultado encontrado.',
-            //   'warning'
-            // );
-            // reject(new Error('Nenhum resultado encontrado.'));
+            reject(new Error('Nenhum resultado encontrado.'));
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
+          Swal.fire({
+            title: "Atenção!",
+            text: "Houve um problema na requisição.",
+            icon: "warning",
+            allowOutsideClick: false,
+            showConfirmButton: true,
+          });
           reject(errorThrown);
         },
         xhr: () => {
@@ -254,7 +256,7 @@ export class SimpleTable {
           $('.bp').prop('disabled', true);
           Swal.fire({
             title: "Carregando...",
-            html: '<div class="progress"><div class="progress-bar" role="progressbar"></div></div>',
+            html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
             allowOutsideClick: false,
             showConfirmButton: false,
             willOpen: () => {
@@ -271,7 +273,7 @@ export class SimpleTable {
     // $(`${this.tableSelector}`).hide();
 
     if (this.data_array == null && this.dinamica == true) {
-      if(this.refreshing != true){
+      if(this.refreshing == false && $(`${this.search_barSelector}`).val() == ""){
         await this.buscarDados(this.url, { 'pesquisa': '' });
       }
     }
@@ -392,9 +394,9 @@ export class SimpleTable {
     linkCSS.rel = "stylesheet";
     linkCSS.href = url;
 
-    var popper = document.createElement("script");
-    popper.src = "https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js";
-    document.head.appendChild(popper);
+    // var bootstrap = document.createElement("script");
+    // bootstrap.src = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css";
+    // document.head.appendChild(bootstrap);
 
     document.head.appendChild(linkCSS);
   }
