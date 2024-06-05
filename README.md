@@ -95,7 +95,7 @@ let tabela_dinamica = new SimpleTable(
 
 ```php
 <?php
-include '../../../conecta.php';
+include '../../../conecta.php'; //Conexão com o banco de dados importada
 
 $pesquisa = $_POST['pesquisa'] ?? '';
 $pagina = $_POST['pagina'] ?? 1;
@@ -130,7 +130,7 @@ if ($pagina == 1) {
 }
 
 $qry = "SELECT -- campos da sua query FROM table1 sc -- seus JOINS $condicoes LIMIT $itensPorPagina OFFSET $offset";
-$stmt = $db->prepare($qry);
+$stmt = $db->prepare($qry); 
 
 if ($stmt->execute()) {
     $resultado = $stmt->get_result();
@@ -165,8 +165,8 @@ if ($stmt->execute()) {
     echo json_encode(['msg' => 'Erro ao consultar os dados.', 'status' => 'error']);
 }
 
-$stmt->close();
-$db->close();
+$stmt->close(); //Encerre o uso do método stmt
+$db->close(); //Feche sua conexão com o banco de dados
 ```
 
 Para garantir o funcionamento correto da biblioteca, todos os critérios acima devem ser cumpridos.
