@@ -259,9 +259,6 @@ export class SimpleTable {
             html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
             allowOutsideClick: false,
             showConfirmButton: false,
-            willOpen: () => {
-              $(".progress-bar").css("width", "0%");
-            },
           });
         },
       });
