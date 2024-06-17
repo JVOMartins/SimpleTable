@@ -23,7 +23,7 @@ export class SimpleTable {
       $(`${this.tableSelector}`).hide();
       $(`${this.search_barSelector}`).hide();
 
-      this.importarCSSSeNecessario("./SimpleTable/style/style.css");
+      this.importarCSSSeNecessario("./assets/plugins/SimpleTable/style/style.css");
 
       this.importarBS();
 
@@ -118,64 +118,75 @@ export class SimpleTable {
 
     let indicesBotoes = 0;
     let numPaginas = this.totalPaginas;
+    var botoesHtml;
 
-    if (this.dinamica === true) {
-      numPaginas = this.numPaginas_dinamicas;
-      this.paginaAtual = this.pgDinamica - 1;
-    }
+    if (numPaginas > 0) {
 
-    if (this.paginaAtual == 0) {
-      if (numPaginas <= 3) {
-        indicesBotoes = _.range(this.paginaAtual, numPaginas);
-      } else {
-        indicesBotoes = _.range(this.paginaAtual, this.paginaAtual + 3);
-        indicesBotoes.push("...");
-        indicesBotoes.push(numPaginas - 1);
+      if (this.dinamica === true) {
+        numPaginas = this.numPaginas_dinamicas;
+        this.paginaAtual = this.pgDinamica - 1;
       }
-    } else {
-      if (numPaginas <= 3) {
-        indicesBotoes = _.range(0, numPaginas);
-      } else {
-        if (this.paginaAtual == numPaginas - 1) {
-          indicesBotoes = _.range(this.paginaAtual - 2, numPaginas);
-          indicesBotoes.unshift("...");
-          indicesBotoes.unshift(0);
+
+      if (this.paginaAtual == 0) {
+        if (numPaginas <= 3) {
+          indicesBotoes = _.range(this.paginaAtual, numPaginas);
         } else {
-          indicesBotoes = _.range(this.paginaAtual - 1, this.paginaAtual + 2);
-          if (this.paginaAtual == 2) {
-            indicesBotoes.unshift(0);
-          }
-          if (this.paginaAtual >= 3) {
+          indicesBotoes = _.range(this.paginaAtual, this.paginaAtual + 3);
+          indicesBotoes.push("...");
+          indicesBotoes.push(numPaginas - 1);
+        }
+      } else {
+        if (numPaginas <= 3) {
+          indicesBotoes = _.range(0, numPaginas);
+        } else {
+          if (this.paginaAtual == numPaginas - 1) {
+            indicesBotoes = _.range(this.paginaAtual - 2, numPaginas);
             indicesBotoes.unshift("...");
             indicesBotoes.unshift(0);
-          }
-          if (numPaginas - 1 - this.paginaAtual != 1) {
-            indicesBotoes.push("...");
-            indicesBotoes.push(numPaginas - 1);
+          } else {
+            indicesBotoes = _.range(this.paginaAtual - 1, this.paginaAtual + 2);
+            if (this.paginaAtual == 2) {
+              indicesBotoes.unshift(0);
+            }
+            if (this.paginaAtual >= 3) {
+              indicesBotoes.unshift("...");
+              indicesBotoes.unshift(0);
+            }
+            if (numPaginas - 1 - this.paginaAtual != 1) {
+              indicesBotoes.push("...");
+              indicesBotoes.push(numPaginas - 1);
+            }
           }
         }
       }
-    }
 
-    if (!this.colunas > 0) {
-      let cabecalho = $(this.tableSelector).find(`tr:first`);
-      this.colunas = $(cabecalho).find("th,td").length;
-    }
-
-    let botoesHtml = `<tr style="text-align-last:center;"><td colspan="${this.colunas ?? 0}"><button id="anterior" data-table="${this.tableSelector}" type="button" class="btn btn-outline-primary btn-sm mr-2 bp">&lt;</button>`;
-
-    for (let i = 0; i < indicesBotoes.length; i++) {
-      const indice = indicesBotoes[i];
-      if (indice === "...") {
-        botoesHtml += `<span class="pagination-ellipsis mr-2" style="color:#007bff;">&hellip;</span>`;
-      } else if (indice === this.paginaAtual) {
-        botoesHtml += `<button class="btn btn-primary btn-sm mr-2 is-current">${indice + 1}</button>`;
-      } else {
-        botoesHtml += `<button class="btn btn-outline-primary btn-sm mr-2 btnpg bp" data-table="${this.tableSelector}" data-page="${indice}">${indice + 1}</button>`;
+      if (!this.colunas > 0) {
+        let cabecalho = $(this.tableSelector).find(`tr:first`);
+        this.colunas = $(cabecalho).find("th,td").length;
       }
-    }
 
-    botoesHtml += `<button id="proximo" type="button" data-table="${this.tableSelector}" class="btn btn-outline-primary btn-sm bp" >&gt;</button></td></tr>`;
+      botoesHtml = `<tr style="text-align-last:center;"><td colspan="${this.colunas ?? 0}"><button id="anterior" data-table="${this.tableSelector}" type="button" class="btn btn-outline-primary btn-sm mr-2 bp">&lt;</button>`;
+
+      for (let i = 0; i < indicesBotoes.length; i++) {
+        const indice = indicesBotoes[i];
+        if (indice === "...") {
+          botoesHtml += `<span class="pagination-ellipsis mr-2" style="color:#007bff;">&hellip;</span>`;
+        } else if (indice === this.paginaAtual) {
+          botoesHtml += `<button class="btn btn-primary btn-sm mr-2 is-current">${indice + 1}</button>`;
+        } else {
+          botoesHtml += `<button class="btn btn-outline-primary btn-sm mr-2 btnpg bp" data-table="${this.tableSelector}" data-page="${indice}">${indice + 1}</button>`;
+        }
+      }
+
+      botoesHtml += `<button id="proximo" type="button" data-table="${this.tableSelector}" class="btn btn-outline-primary btn-sm bp" >&gt;</button></td></tr>`;
+    } else {
+      if (!this.colunas > 0) {
+        let cabecalho = $(this.tableSelector).find(`tr:first`);
+        this.colunas = $(cabecalho).find("th,td").length;
+      }
+      botoesHtml = `<tr style="text-align-last:center;"><td colspan="${this.colunas ?? 0}"><button disabled type="button" class="btn btn-outline-primary btn-sm mr-2 bp">&lt;</button>`;
+      botoesHtml += `<button disabled type="button" class="btn btn-outline-primary btn-sm bp" >&gt;</button></td></tr>`;
+    }
 
     var old_tfoot = $(`${this.tableSelector} tfoot`);
     var classes = old_tfoot.attr('class');
@@ -216,12 +227,24 @@ export class SimpleTable {
           Swal.close();
           if (response.status === 'success') {
             self.data_array = response.dados;
-            response.numpaginas > 0 ? self.numPaginas_dinamicas = response.numpaginas : null;
-            self.totalPaginas = self.numPaginas_dinamicas;
-            self.pgDinamica = response.pagina;
-            self.botoesPaginacao();
-            resolve(response);
-            $('.bp').prop('disabled', false);
+            if (self.data_array == null) {
+              self.data_array = null;
+              self.refreshing = true;
+              response.numpaginas = 0;
+              self.totalPaginas = 0;
+              self.pgDinamica = 1;
+              self.botoesPaginacao();
+              resolve(response);
+              $('.bp').prop('disabled', false);
+              reject(new Error('Nenhum resultado encontrado.'));
+            } else {
+              response.numpaginas > 0 ? self.numPaginas_dinamicas = response.numpaginas : null;
+              self.totalPaginas = self.numPaginas_dinamicas;
+              self.pgDinamica = response.pagina;
+              self.botoesPaginacao();
+              resolve(response);
+              $('.bp').prop('disabled', false);
+            }
           } else {
             self.data_array = null;
             self.refreshing = true;
@@ -270,7 +293,7 @@ export class SimpleTable {
     // $(`${this.tableSelector}`).hide();
 
     if (this.data_array == null && this.dinamica == true) {
-      if(this.refreshing == false && $(`${this.search_barSelector}`).val() == ""){
+      if (this.refreshing == false && $(`${this.search_barSelector}`).val() == "") {
         await this.buscarDados(this.url, { 'pesquisa': '' });
       }
     }
@@ -313,7 +336,7 @@ export class SimpleTable {
                               ${Array.isArray(dado) ?
                   dado.map((e) => `<td ${this.contemTagsHtml(e) ? '' : `title="${e}"`}>${e}</td>`).join("") :
                   Object.values(dado)
-                    .map((e) => `<td ${this.contemTagsHtml(e) ? '' : `title="${e}"`}>${e}</td>`).join("") 
+                    .map((e) => `<td ${this.contemTagsHtml(e) ? '' : `title="${e}"`}>${e}</td>`).join("")
                 }
                               </tr>`
             ) :
@@ -409,11 +432,11 @@ export class SimpleTable {
   }
   async refresh() {
     const termo = $(`${this.search_barSelector}`).val();
-    
+
     try {
       // Aguarde a conclusão da busca de dados
       await this.buscarDados(this.url, { 'pesquisa': termo });
-      
+
       // Atualize a tabela
       this.tabela();
     } catch (error) {
@@ -421,5 +444,5 @@ export class SimpleTable {
       // Trate o erro, se necessário
     }
   }
-  
+
 }
