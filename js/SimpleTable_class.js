@@ -17,6 +17,7 @@ export class SimpleTable {
     this.colunas = 0;
 
     this.refreshing = false;
+    this._retorno;
 
     this.carregarLodash().then(() => {
 
@@ -30,6 +31,14 @@ export class SimpleTable {
       this.setupEventListeners();
 
       this.tabela();
+    });
+
+    Object.defineProperty(this, 'retorno', {
+      get: () => this._retorno,
+      set: (newValue) => {
+        this._retorno = newValue;
+        $(document).trigger('retornoChanged', [newValue]);
+      }
     });
 
   }
@@ -227,6 +236,7 @@ export class SimpleTable {
           Swal.close();
           if (response.status === 'success') {
             self.data_array = response.dados;
+            self.retorno = response.retorno;
             if (self.data_array == null) {
               self.data_array = null;
               self.refreshing = true;

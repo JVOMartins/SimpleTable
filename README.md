@@ -82,7 +82,7 @@ As tabelas dinâmicas alteram seu conteúdo conforme a alteração da página ou
 
 ```javascript
 let tabela_dinamica = new SimpleTable(
-    null, // Define como null, pois os dados virão do back-end
+    null, // Define como null, pois os dados virão do back-end de maneira paginada
     `#tabela_fila`, // Elemento HTML (já deve estar criado)
     `#pesquisa`, // Mecanismo de pesquisa na tabela (com classe searchbar)
     true, // Define a tabela como dinâmica
@@ -168,8 +168,60 @@ if ($stmt->execute()) {
 $stmt->close(); //Encerre o uso do método stmt
 $db->close(); //Feche sua conexão com o banco de dados
 ```
+Para garantir o funcionamento correto da biblioteca no modo dinâmico, todos os critérios acima devem ser cumpridos.
 
-Para garantir o funcionamento correto da biblioteca, todos os critérios acima devem ser cumpridos.
+## Payload
+
+O uso de payloads possibilita passar os parâmetros necessários para o back-end em tabelas dinâmicas. O envio dos dados da payload é baseado no seletor escolhido pelo usuário, normalmente, recomendo o uso de classes para enviar os dados para o back-end.
+
+A seguir, um exemplo de uma tabela dinâmica com o uso de payload:
+
+```javascript
+let tabela_dinamica = new SimpleTable(
+    null, // O uso de null aqui é necessário, pois os dados virão do back-end de maneira paginada
+    `#tabela_exemplo`, // Elemento HTML (já deve estar criado)
+    `#pesquisa`, // Mecanismo de pesquisa na tabela (com classe searchbar)
+    true, // Define a tabela como dinâmica
+    'pg/fila_simpletable/load/load_fila.php', // Caminho do load
+    '.payload' // Payload que será enviada (recomendo usar classe como parâmetro, mas qualquer seletor será aceito)
+);
+```
+A payload chega no back-end com base em certos atributos do elemento, no caso o name e o value. Então o elemento que contiver o seletor informado na criação da instância da tabela, deve conter nome e value, esses serão enviados como parâmetro na requisição ajax.
+
+## Retorno
+
+Quando algum dado específico precisa ser acessado no front-end de uma tabela dinâmica, é possível definir um retorno para um elemento externo a tabela referenciada na criação da instância.
+
+```php
+$numeroPaginas = ($pagina == 1) ? ceil($totalRegistros / $itensPorPagina) : false;
+{
+    //...
+
+    echo json_encode([
+        'msg' => 'Dados carregados com sucesso.',
+        'status' => 'success',
+        'dados' => $dados,
+        'numpaginas' => $numeroPaginas ?? 0,
+        'pagina' => $pagina ?? 0,
+        'retorno' => moeda($valorTotal) //No retorno podemos definir as informações que serão utilizadas de maneira externa ao componente
+    ]);
+} else {
+    echo json_encode(['msg' => 'Nenhum dado foi encontrado.', 'status' => 'success', 'dados' => null]);
+}
+```
+
+No front-end os valores definidos no response podem ser acessados através de um evento personalizado. A seguir o exemplo da utilização:
+
+````javascript
+    $(document).on('retornoChanged', function (event, newValue) {
+        if (newValue != null) {
+            $("#valorTotal").html(`${newValue}`);
+        } else {
+            $("#valorTotal").empty();
+        }
+    });
+````
+Dessa maneira poderemos trabalhar com conteúdo que vem da requisição mas não será utilizado dentro do elemento Table.
 
 ## Licença
 
