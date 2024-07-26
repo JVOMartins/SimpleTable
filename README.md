@@ -1,6 +1,6 @@
 # SimpleTable
 
-A biblioteca SimpleTable foi criada para padronizar e agilizar a criação de tabelas.
+A biblioteca SimpleTable foi criada para padronizar e agilizar a criação de tabelas de maneira rápida, fácil e eficiente.
 
 ## Importação do Módulo
 
