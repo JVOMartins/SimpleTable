@@ -1,8 +1,8 @@
 # SimpleTable
 
-Documentation is available in the following languages:
-A documentação está disponível nos seguintes idiomas:
-La documentación está disponible en los siguientes idiomas:
+Documentation is available in the following languages:  
+A documentação está disponível nos seguintes idiomas:  
+La documentación está disponible en los siguientes idiomas:  
 
 - [English](#English)
 - [Português](#Português)
