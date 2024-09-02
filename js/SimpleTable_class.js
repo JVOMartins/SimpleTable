@@ -251,6 +251,8 @@ export class SimpleTable {
               response.numpaginas > 0 ? self.numPaginas_dinamicas = response.numpaginas : null;
               self.totalPaginas = self.numPaginas_dinamicas;
               self.pgDinamica = response.pagina;
+              response.linhasPorPagina > 0 && response.linhasPorPagina != self.linhasPorPagina ? 
+              self.linhasPorPagina = response.linhasPorPagina : null;
               self.botoesPaginacao();
               resolve(response);
               $('.bp').prop('disabled', false);
@@ -308,10 +310,11 @@ export class SimpleTable {
       }
     }
 
-    const linhasPorPagina = 10;
+    
     const search_bar = this.search_barSelector;
 
     const dados = this.data_array;
+    const linhasPorPagina = dados.linhasPorPagina ?? 10;
     let totalPaginas = this.totalPaginas;
 
     // $(search_bar).val("");

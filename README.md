@@ -173,10 +173,11 @@ if ($stmt->execute()) {
     echo json_encode([
         'msg' => 'Data loaded successfully.',
         'status' => 'success',
-        'data' => $data,
+        'dados' => $data,
         'numpaginas' => $numberPages,
-        'page' => $page,
-        'query' => $qry
+        'pagina' => $page,
+        'query' => $qry,
+        'linhasPorPagina' => $itemsPerPage
     ]);
 } else {
     echo json_encode(['msg' => 'Error querying data.', 'status' => 'error']);
@@ -416,7 +417,8 @@ if ($stmt->execute()) {
         'dados' => $dados,
         'numpaginas' => $numeroPaginas,
         'pagina' => $pagina,
-        'query' => $qry
+        'query' => $qry,
+        'linhasPorPagina' => $itemsPorPagina
     ]);
 } else {
     echo json_encode(['msg' => 'Erro ao consultar os dados.', 'status' => 'error']);
@@ -654,10 +656,11 @@ if ($stmt->execute()) {
     echo json_encode([
         'msg' => 'Datos cargados con éxito.',
         'status' => 'success',
-        'datos' => $datos,
+        'dados' => $datos,
         'numpaginas' => $numeroPaginas,
         'pagina' => $pagina,
-        'query' => $qry
+        'query' => $qry,
+        'linhasPorPagina' => $itemsPorPagina
     ]);
 } else {
     echo json_encode(['msg' => 'Error al consultar los datos.', 'status' => 'error']);
