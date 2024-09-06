@@ -314,7 +314,7 @@ export class SimpleTable {
     const search_bar = this.search_barSelector;
 
     const dados = this.data_array;
-    const linhasPorPagina = dados.linhasPorPagina ?? 10;
+    const linhasPorPagina = this.linhasPorPagina ?? 10;
     let totalPaginas = this.totalPaginas;
 
     // $(search_bar).val("");
